@@ -1,12 +1,5 @@
 .container
-  = link_to 'Go', go_threads_path, remote: true
-
-  %table.table
-    %thead
-      %tr
-        %th
-    %tbody
-      %tr
-        %td
-        %td
-        %td
+  %div{ style: 'margin: 50px 0 10px 0' }
+    = link_to 'Go', go_threads_path, remote: true, class: 'btn btn-primary'
+    %table.table
+      %tbody

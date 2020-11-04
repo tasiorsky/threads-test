@@ -5,61 +5,40 @@ class ThreadsController < ApplicationController
 
   def go
     @x = 0
-    threads(3).join
+    init_threads
 
-    10.times do
+    7.times do
       @x = rand(100)
 
       sleep(2)
     end
 
     @x = -1
+
+    head :ok
   end
 
-  def threads(count)
+  def init_threads
     threads = []
 
-    count.times do
+    3.times do
       t = Thread.new do
-        current_value = @x
+        values = []
 
         loop do
           break if @x == -1
+          next if @x.in?(values)
 
-          next if current_value == @x
-
-          ActionCable.server.broadcast('main_channel', {
-            thread: Thread.current.object_id,
-            value_in_thread: @x
-          })
-          current_value = @x
+          values << @x
+          ActionCable.server.broadcast('main_channel',
+                                       thread: Thread.current.object_id,
+                                       values_in_thread: values)
         end
       end
 
       threads << t
     end
 
-    threads
+    threads.join
   end
 end
-
-
-
-
-
-# def test
-#   x = 'a'
-
-#   10.times { x << 'a' }
-
-#   t1 = Thread.new do
-#     10.times { x << 'b' }
-#     p "first - #{x}"
-#   end
-#   t2 = Thread.new do
-#     10.times { x << 'c' }
-#     p "second - #{x}"
-#   end
-
-#   p "base #{x}"
-# end
