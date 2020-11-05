@@ -1,18 +1,15 @@
 class ThreadsController < ApplicationController
   def index
+    ThreadsTest::Application.config.test_value ||= rand(100)
+
+    @val = ThreadsTest::Application.config.test_value
+
     respond_to :html
   end
 
   def set
-    5.times do
-      ThreadsTest::Application.config.test_value = rand(100)
-
-      sleep(2)
-    end
-
-    ThreadsTest::Application.config.test_value = -1
-
-    head :ok
+    ThreadsTest::Application.config.test_value = rand(100)
+    redirect_to threads_path
   end
 
   def get
