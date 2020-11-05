@@ -3,6 +3,35 @@ class ThreadsController < ApplicationController
     respond_to :html
   end
 
+  def set
+    5.times do
+      ThreadsTest::Application.config.test_value = rand(100)
+
+      sleep(2)
+    end
+
+    ThreadsTest::Application.config.test_value = -1
+
+    head :ok
+  end
+
+  def get
+    values = []
+
+    loop do
+      value = ThreadsTest::Application.config.test_value
+      break if value == -1
+      next if value.in?(values)
+
+      values << value
+      ActionCable.server.broadcast('main_channel',
+                                   thread: Thread.current.object_id,
+                                   values_in_thread: values)
+    end
+
+    head :ok
+  end
+
   def go
     @x = 0
     init_threads
@@ -17,6 +46,8 @@ class ThreadsController < ApplicationController
 
     head :ok
   end
+
+  private
 
   def init_threads
     threads = []

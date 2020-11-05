@@ -9,3 +9,14 @@ $(document).ready ->
   $('.btn').on 'ajax:success', ->
     $(this).prop('disabled', false)
     $(this).toggleClass('disabled', false)
+
+  $('body').on 'click', '.go', (e) ->
+    e.preventDefault()
+
+    $.ajax
+      url: $(this).data('set')
+
+    for i in [1..2]
+      $.ajax
+        url: $(this).data('get')
+        data: {i: i}

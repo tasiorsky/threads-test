@@ -5,5 +5,7 @@ Rails.application.routes.draw do
 
   resources :threads, only: [:index] do
     get :go, on: :collection
+    get :set, on: :collection
+    get :get, on: :collection
   end
 end
