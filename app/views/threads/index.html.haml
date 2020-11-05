@@ -1,6 +1,6 @@
 .container
   %div{ style: 'margin: 50px 0 10px 0' }
-    = link_to 'Set new value', set_threads_path, class: 'btn btn-primary'
+    = link_to 'Set new value', set_threads_path, method: :post, class: 'btn btn-primary'
     = link_to 'Refresh', threads_path, class: 'btn btn-primary'
     -# = link_to 'Go', '#', class: 'go btn btn-primary',
     -#   data: { set: set_threads_path, get: get_threads_path }
